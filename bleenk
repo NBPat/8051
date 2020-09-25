@@ -1,0 +1,21 @@
+#include<8052.h>
+unsigned int x;
+void delay (unsigned int j)
+{
+j = j*10000;
+for(x=0;x<j;j++);
+}
+void main()
+{
+P0=0x00;
+delay(20);
+P0=0xff;
+P1=0x00;
+delay(20);
+P1=0xff;
+P2=0x00;
+delay(20);
+P2=0xff;
+delay(1000);
+}
+
