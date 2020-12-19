@@ -1,0 +1,55 @@
+/*
+ * File:   newmain.c
+ * Author: pat
+ *online tut https://microchipdeveloper.com/tls0101:start
+ * Created on December 18, 2020, 11:43 AM
+ */
+#include <xc.h>
+#pragma config WDTE = OFF  // WDT operating mode(WDT disabled, SWDTEN ignored)
+#define _XTAL_FREQ 2000000
+#define OFF 0
+#define ON 1
+//forward decs
+void delayOneSecond(void);
+void initLED(void);
+void setLED(int state);
+// vars
+int num_Blinks = 0;
+// main
+void newmain(void) 
+	{
+	initLED();
+	while(1)
+		{
+		setLED(ON);
+		delayOneSecond();
+		setLED(OFF);
+		delayOneSecond();
+        	delayOneSecond();
+        	delayOneSecond();
+        	delayOneSecond();
+        delayOneSecond();
+		num_Blinks++;
+		}
+	return;
+	}
+
+//init
+void initLED(void)
+	{
+	ANSELF &= 0xF7;
+    	TRISF &= 0xF7;
+	}
+// setLED
+void setLED(int state)
+	{
+	if (state == ON)
+		LATF &= 0xF7;
+	else
+		LATF |= 0x08;
+	}
+// delayOneSecond
+void delayOneSecond(void)
+	{
+        __delay_ms(300);	
+	}	
