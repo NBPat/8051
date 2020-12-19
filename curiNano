@@ -16,7 +16,7 @@ void setLED(int state);
 // vars
 int num_Blinks = 0;
 // main
-void newmain(void) 
+void main(void) 
 	{
 	initLED();
 	while(1)
