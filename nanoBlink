@@ -1,0 +1,23 @@
+/*
+ * File:   newmain1.c
+ * Author: pat
+ * second try from video 
+ * Created on December 18, 2020, 5:18 PM
+ */
+
+
+#include <xc.h>
+
+#define _XTAL_FREQ 2000000
+
+void main(void) {
+    ANSELF &= 0xF7;
+    TRISF &= 0xF7;
+    while (1) {
+        LATF &= 0xF7;
+        __delay_ms(300);
+        LATF |= 0x08;
+        __delay_ms(300);
+    }
+    return;
+}
