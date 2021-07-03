@@ -1,0 +1,49 @@
+// F85x_Blinky.c
+//  from   /home/pat/SimplicityStudio_v3/developer/sdks/si8051/v3/examples/C8051F850DK/Blinky_Simple/src
+#include <SI_C8051F850_Defs.h>
+#include <SI_C8051F850_Register_Enums.h>
+#define SYSCLK       24500000/8        // SYSCLK frequency in Hz
+SBIT(LED0, SFR_P1, 0);                  // P1.0 LED
+SBIT(LED1, SFR_P1, 1);
+SBIT(LED2, SFR_P1, 2);
+SBIT(LED3, SFR_P1, 3);
+SBIT(LED4, SFR_P1, 4);
+SBIT(LED5, SFR_P1, 5);
+void Port_Init (void);
+void Timer2_Init (int counts);
+
+void main (void)
+{
+   WDTCN = 0xDE;
+   WDTCN = 0xAD;
+   Port_Init ();
+   Timer2_Init (SYSCLK / 12 / 10);  // Init Timer2 to generate interrupts
+   IE_EA = 1;                       // Enable global interrupts
+   while (1) {}                     // Spin forever
+}
+// Configure the Crossbar and GPIO ports.
+// P1.0 - LED (push-pull output)
+void Port_Init (void)
+{
+   P1MDOUT |= 0x01;                    // Enable LED as a push-pull output
+   XBR2 = 0x40;                        // Enable crossbar and weak pull-ups
+}
+void Timer2_Init (int counts)
+{
+   TMR2CN = 0x00;                      // Stop Timer2; Clear TF2;
+   CKCON &= ~0x60;                     // Timer2 clocked based on T2XCLK;
+   TMR2RL = -counts;                   // Init reload values
+   TMR2 = 0xffff;                      // Set to reload immediately
+   IE_ET2 = 1;                         // Enable Timer2 interrupts
+   TMR2CN_TR2 = 1;                     // Start Timer2
+}
+INTERRUPT(Timer2_ISR, TIMER2_IRQn)
+{
+   TMR2CN_TF2H = 0;                       // Clear Timer2 interrupt flag
+   LED0 = !LED0;                            // Change state of LED
+   LED1 = !LED0;
+   LED2 = !LED1;
+   LED3 = !LED2;
+   LED4 = !LED3;
+   LED5 = !LED4;
+}
